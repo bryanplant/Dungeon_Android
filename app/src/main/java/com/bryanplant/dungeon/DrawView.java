@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 public class DrawView extends View {
-    Player player = new Player();
+   Player player = new Player();
 
     Paint paint = new Paint();
 
@@ -20,14 +20,21 @@ public class DrawView extends View {
         super(context);
     }
 
+    Bitmap p = BitmapFactory.decodeResource(getResources(), R.drawable.player);
+    Rect src = new Rect(0, 0, 160, 160);
+    Rect dst = new Rect(100, 100, 500, 500);
+
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Bitmap p = BitmapFactory.decodeResource(getResources(), R.drawable.player);
+        canvas.drawBitmap(p, src, dst, null);
 
-        canvas.drawRect(50, 0, 150, 100, null);
+        paint.setColor(Color.GREEN);
+        paint.setTextSize(24);
+        canvas.drawRect(50, 0, 150, 100, paint);
+        canvas.drawText(Integer.toString(p.getWidth()), 300, 50, paint);
 
     }
 }

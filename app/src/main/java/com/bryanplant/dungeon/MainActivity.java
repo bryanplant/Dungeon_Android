@@ -7,30 +7,39 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends AppCompatActivity {
-    DrawView drawView;
+//https://www.javacodegeeks.com/2011/07/android-game-development-moving-images.html
 
-    public static int SCREEN_WIDTH;  //2560
-    public static int SCREEN_HEIGHT; //1440
+public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // requesting to turn the title OFF
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // making it full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // set our MainGamePanel as the View
+        setContentView(new GameView(this));
+        Log.d(TAG, "View added");
+    }
 
-        drawView = new DrawView(this);
-        drawView.setBackgroundColor(Color.WHITE);
-        setContentView(drawView);
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "Destroying...");
+        super.onDestroy();
+    }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
-        SCREEN_WIDTH = displayMetrics.widthPixels;
-        SCREEN_HEIGHT = displayMetrics.heightPixels;
-
-        System.out.println(SCREEN_HEIGHT);
-        System.out.println(SCREEN_WIDTH);
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "Stopping...");
+        super.onStop();
     }
 }

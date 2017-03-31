@@ -60,14 +60,6 @@ public class GameView extends SurfaceView implements
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             player.handleInput((int)event.getX(), (int)event.getY());
-
-            /*if(event.getY() > getHeight() - 50){
-                thread.setRunning(false);
-                ((Activity)getContext()).finish();
-            }
-            else{
-                Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
-            }*/
         }
         return super.onTouchEvent(event);
     }

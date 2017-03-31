@@ -17,7 +17,7 @@ public class Player{
    private Paint paint = new Paint();
     private Rect src, dst;
     private Bitmap p;
-    private int x, y, src_width, src_height, width = 100, height = 100;
+    private int x, y, src_width, src_height, width = 200, height = 200;
 
     public Player(Bitmap p, int x, int y){
         this.p = p;
@@ -25,7 +25,7 @@ public class Player{
         this.y = y;
         src_width = p.getWidth()/3;
         src_height = p.getHeight()/4;
-        src = new Rect(0, 0, src_width, src_height);
+        src = new Rect(src_width, src_height, src_width*2, src_height*2);
         dst = new Rect(x, y, x+width, y+height);
     }
 

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private GameView gameView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,29 @@ public class MainActivity extends AppCompatActivity {
         // making it full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         // set our MainGamePanel as the View
-        setContentView(new GameView(this));
+        gameView = new GameView(this);
+        setContentView(gameView);
         Log.d(TAG, "View added");
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.d(TAG, "Paused");
+        gameView.pause();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.d(TAG, "Resuming");
+        gameView.resume();
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.d(TAG, "Restarting");
     }
 
     @Override

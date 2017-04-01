@@ -39,21 +39,13 @@ public class GameView extends SurfaceView implements
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        thread.setRunning(true);
-        thread.start();
+        if(!thread.isAlive())
+            thread.start();
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        boolean retry = true;
-        while(retry){
-            try {
-                thread.join();
-                retry = false;
-            } catch(InterruptedException e){
-                // try again shutting down the thread
-            }
-        }
+
     }
 
     @Override
@@ -75,8 +67,16 @@ public class GameView extends SurfaceView implements
         displayFps(canvas, avgFps);
     }
 
-    public void update(){
+    public void update(float dt){
+        player.update(dt);
+    }
 
+    public void pause(){
+        thread.setRunning(false);
+    }
+
+    public void resume(){
+        thread.setRunning(true);
     }
 
     private void displayFps(Canvas canvas, String fps) {

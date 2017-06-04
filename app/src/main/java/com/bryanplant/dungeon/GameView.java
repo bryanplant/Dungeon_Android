@@ -67,7 +67,7 @@ public class GameView extends SurfaceView implements
         displayFps(canvas, avgFps);
     }
 
-    public void update(float dt){
+    public void update(double dt){
         player.update(dt);
     }
 

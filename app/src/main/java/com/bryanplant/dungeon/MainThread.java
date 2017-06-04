@@ -15,9 +15,9 @@ public class MainThread extends Thread {
     private static final String TAG = MainThread.class.getSimpleName();
 
     // desired fps
-    private final static int 	MAX_FPS = 60;
+    private final static int 	MAX_FPS = 50;
     // maximum number of frames to be skipped
-    private final static int	MAX_FRAME_SKIPS = 5;
+    private final static int	MAX_FRAME_SKIPS = 0;
     // the frame period
     private final static int	FRAME_PERIOD = 1000 / MAX_FPS;
 
@@ -45,7 +45,7 @@ public class MainThread extends Thread {
         long timeDiff;		// the time it took for the cycle to execute
         int sleepTime;		// ms to sleep (<0 if we're behind)
         int framesSkipped;	// number of frames being skipped
-        float dt= 0;
+        double dt = 0;
         int frames = 0;
         long fpsTime = 0;
 
@@ -70,6 +70,7 @@ public class MainThread extends Thread {
                         //Log.d(TAG, "deltaT:" + timeDiff);
                         // calculate sleep time
                         sleepTime = (int) (FRAME_PERIOD - timeDiff);
+                        //Log.d(TAG, "Sleep time: " + sleepTime);
 
                         if (sleepTime > 0) {
                             // if sleepTime > 0 we're OK
@@ -89,11 +90,11 @@ public class MainThread extends Thread {
                         }
 
                         if (framesSkipped > 0) {
-                            //Log.d(TAG, "Skipped:" + framesSkipped);
+                            Log.d(TAG, "Skipped:" + framesSkipped);
                         }
 
                         fpsTime += System.currentTimeMillis() - beginTime;
-                        dt = (float)(System.currentTimeMillis() - beginTime)/1000;
+                        dt = (double)(System.currentTimeMillis() - beginTime)/1000;
 
                         if (fpsTime >= 1000) {
                             gameView.setAvgFps(Double.toString(frames / ((double) 1000 / fpsTime)));

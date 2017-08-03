@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Dungeon</string>
+
+    <string name="title_activity_fullscreen">TitleActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_title">TitleActivity</string>
 </resources>

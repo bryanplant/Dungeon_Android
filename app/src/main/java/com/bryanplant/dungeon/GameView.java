@@ -2,6 +2,7 @@ package com.bryanplant.dungeon;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class GameView extends SurfaceView implements
         SurfaceHolder.Callback {
 
@@ -19,13 +26,22 @@ public class GameView extends SurfaceView implements
 
     private MainThread thread;
     private Player player;
+    private Map map;
 
     public GameView(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), 100, 100);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), 100, 100, getResources().getDisplayMetrics().widthPixels/12, getResources().getDisplayMetrics().widthPixels/12);
+
+        try {
+            map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
+        }
+        catch(Exception e){
+            Log.d(TAG, "Unable to load map!");
+        }
+
 
         thread = new MainThread(getHolder(), this);
 
@@ -62,6 +78,7 @@ public class GameView extends SurfaceView implements
 
     public void render(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
+        map.draw(canvas);
         player.draw(canvas);
         // display fps
         displayFps(canvas, avgFps);

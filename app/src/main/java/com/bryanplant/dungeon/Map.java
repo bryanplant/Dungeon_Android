@@ -1,29 +1,18 @@
 package com.bryanplant.dungeon;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.Buffer;
 import java.util.Random;
 
-/**
- * Created by Bryan on 6/16/2017.
- */
-
 public class Map {
-    Tile tile[][];
-    Random rand;
-    int screenWidth, screenHeight;
-    int mapWidth, mapHeight;
+    private Tile tile[][];
+    private Random rand;
+    private int mapWidth, mapHeight;
+    private int tileSize;
 
     public Map(InputStream is, int screenWidth, int screenHeight) throws IOException{
         rand = new Random();
@@ -33,9 +22,10 @@ public class Map {
         String first = br.readLine();
         mapWidth = Integer.parseInt(first.substring(0, first.indexOf(' ')));
         mapHeight = Integer.parseInt(first.substring(first.indexOf(' ')+1, first.length()));
+        tileSize = screenWidth/16;
 
         tile = new Tile[mapWidth][mapHeight];
-        int color = 0;
+        int type = 0;
 
         for(int j = 0; j < mapHeight; j++){
             String line = br.readLine();
@@ -44,16 +34,16 @@ public class Map {
             for(int i = 0; i < mapWidth; i++){
                 switch(line.charAt(i)){
                     case '0':
-                        color = Color.BLUE;
+                        type = 0;
                         break;
                     case '1':
-                        color = Color.CYAN;
+                        type = 1;
                         break;
                     case '2':
-                        color = Color.GREEN;
+                        type = 2;
                         break;
                 }
-                tile[i][j] = new Tile(i, j, screenWidth/16, screenWidth/16, color);
+                tile[i][j] = new Tile(i, j, tileSize, tileSize, type);
             }
         }
         is.close();
@@ -66,5 +56,21 @@ public class Map {
                 tile[i][j].draw(canvas);
             }
         }
+    }
+
+    public int getMapWidth(){
+        return mapWidth;
+    }
+
+    public int getMapHeight(){
+        return mapHeight;
+    }
+
+    public int getTileSize(){
+        return tileSize;
+    }
+
+    public Tile getTile(int x, int y){
+        return tile[x][y];
     }
 }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.RelativeLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,13 +28,15 @@ public class GameView extends SurfaceView implements
     private MainThread thread;
     private Player player;
     private Map map;
+    private Camera camera;
 
     public GameView(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), 100, 100, getResources().getDisplayMetrics().widthPixels/12, getResources().getDisplayMetrics().widthPixels/12);
+        camera = new Camera();
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
         try {
             map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
@@ -67,7 +70,7 @@ public class GameView extends SurfaceView implements
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            player.handleInput((int)event.getX(), (int)event.getY());
+            player.handleInput((int)event.getX() - camera.getX(), (int)event.getY() - camera.getY(), map);
         }
         return super.onTouchEvent(event);
     }
@@ -77,6 +80,7 @@ public class GameView extends SurfaceView implements
     }
 
     public void render(Canvas canvas) {
+        canvas.translate(camera.getX(), camera.getY());
         canvas.drawColor(Color.BLACK);
         map.draw(canvas);
         player.draw(canvas);
@@ -85,7 +89,8 @@ public class GameView extends SurfaceView implements
     }
 
     public void update(double dt){
-        player.update(dt);
+        player.update(dt, map);
+        camera.update(player, map, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 
     public void pause(){

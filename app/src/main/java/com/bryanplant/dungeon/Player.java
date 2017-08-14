@@ -9,7 +9,6 @@ import android.graphics.Rect;
 public class Player{
     private static final String TAG = GameView.class.getSimpleName();
 
-    private Paint paint = new Paint();
     private Rect srcRect, dstRect;
     private Bitmap p;
     private int x, y;

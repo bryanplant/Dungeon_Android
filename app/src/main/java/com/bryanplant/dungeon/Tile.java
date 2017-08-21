@@ -7,23 +7,22 @@ import android.graphics.Rect;
 
 public class Tile {
     private Rect rect;
-    private int x, y, width, height;
+    private int x, y, size;
     private int type, color;
 
-    public Tile(int x, int y, int width, int height, int type){
+    public Tile(int x, int y, int size, int type){
         this.x = x;
         this.y = y;
         this.type = type;
-        this.width = width;
-        this.height = height;
-        rect = new Rect(x*width, y*height, x*width+width, y*height+height);
+        this.size = size;
+        rect = new Rect(x*size, y*size, x*size+size, y*size+size);
 
         switch(type){
             case 0:
-                color = Color.BLUE;
+                color = Color.argb(255, 60, 105, 112);
                 break;
             case 1:
-                color = Color.CYAN;
+                color = Color.BLACK;
                 break;
             case 2:
                 color = Color.GREEN;
@@ -46,4 +45,7 @@ public class Tile {
         return type;
     }
 
+    public int getSize(){
+        return size;
+    }
 }

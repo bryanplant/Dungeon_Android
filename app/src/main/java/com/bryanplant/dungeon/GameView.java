@@ -29,6 +29,7 @@ public class GameView extends SurfaceView implements
     private Player player;
     private Map map;
     private Camera camera;
+    private HUD hud;
 
     public GameView(Context context) {
         super(context);
@@ -36,6 +37,7 @@ public class GameView extends SurfaceView implements
         getHolder().addCallback(this);
 
         camera = new Camera();
+        hud = new HUD();
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
         try {
@@ -70,7 +72,7 @@ public class GameView extends SurfaceView implements
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            player.handleInput((int)event.getX() - camera.getX(), (int)event.getY() - camera.getY(), map);
+            player.handleInput((int)event.getX() + camera.getX(), (int)event.getY() + camera.getY(), map);
         }
         return super.onTouchEvent(event);
     }
@@ -80,12 +82,13 @@ public class GameView extends SurfaceView implements
     }
 
     public void render(Canvas canvas) {
-        canvas.translate(camera.getX(), camera.getY());
+        canvas.translate(-camera.getX(), -camera.getY());
         canvas.drawColor(Color.BLACK);
         map.draw(canvas);
         player.draw(canvas);
+        hud.draw(canvas, camera);
         // display fps
-        displayFps(canvas, avgFps);
+        //displayFps(canvas, avgFps);
     }
 
     public void update(double dt){

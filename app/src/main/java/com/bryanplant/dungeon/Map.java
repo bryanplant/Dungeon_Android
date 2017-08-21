@@ -98,12 +98,12 @@ public class Map {
         }
 
         //draw lines around outside of map
-        paint.setColor(Color.GREEN);
+        /*paint.setColor(Color.GREEN);
         paint.setStrokeWidth(10);
         canvas.drawLine(0, 0, 0, mapHeight*tileSize, paint);
         canvas.drawLine(0, 0, mapWidth*tileSize, 0, paint);
         canvas.drawLine(0, mapHeight*tileSize, mapWidth*tileSize, mapHeight*tileSize, paint);
-        canvas.drawLine(mapWidth*tileSize, 0, mapWidth*tileSize, mapHeight*tileSize, paint);
+        canvas.drawLine(mapWidth*tileSize, 0, mapWidth*tileSize, mapHeight*tileSize, paint);*/
     }
 
     public int getMapWidth(){

@@ -27,6 +27,7 @@ public class GameView extends SurfaceView implements
 
     private MainThread thread;
     private Player player;
+    private Enemy enemy;
     private Map map;
     private Camera camera;
     private HUD hud;
@@ -39,6 +40,7 @@ public class GameView extends SurfaceView implements
         camera = new Camera();
         hud = new HUD();
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
+        enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
         try {
             map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
@@ -86,6 +88,7 @@ public class GameView extends SurfaceView implements
         canvas.drawColor(Color.BLACK);
         map.draw(canvas);
         player.draw(canvas);
+        enemy.draw(canvas);
         hud.draw(canvas, camera);
         // display fps
         //displayFps(canvas, avgFps);
@@ -93,6 +96,7 @@ public class GameView extends SurfaceView implements
 
     public void update(double dt){
         player.update(dt, map);
+        enemy.update(dt, player, map);
         camera.update(player, map, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 

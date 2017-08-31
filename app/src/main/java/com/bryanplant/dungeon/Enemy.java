@@ -6,17 +6,32 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+/*
+ * The Enemy class stores information about an enemy character
+ * and handles everything required animate the character and update
+ * the character's position and actions
+ */
+
 public class Enemy {
 
-    private int x, y;
-    private int dir, srcWidth, srcHeight, size;
-    private boolean moving;
-    private double aniT = 0;
-    private double aniInterval = .35;
-    private double speed = 300;
-    private Bitmap e;
-    private Rect srcRect, dstRect, moveRect;
+    private int x, y;                   //x and y location of enemy
+    private int dir;                    //direction the enemy is facing
+    private int srcWidth, srcHeight;    //dimensions of enemy sprite on source png
+    private int size;                   //width and height of sprite to be drawn to the screen
+    private boolean moving;             //if the enemy is moving or not
+    private double aniT = 0;            //animation timer
+    private double aniInterval = .35;   //time between animation frames
+    private double speed = 300;         //speed at which the enemy moves
+    private Bitmap e;                   //stores enemy sprite
+    private Rect srcRect, dstRect, moveRect;  //sprite on bitmap, sprite on screen, next position of sprite
 
+    /*
+     * Initializes Enemy
+     * @param e Bitmap containing enemy sprite
+     * @param x Starting x coordinate of Enemy
+     * @param y Starting y coordinate of Enemy
+     * @param size Width and height of sprite drawn to screen
+     */
     public Enemy(Bitmap e, int x, int y, int size){
         this.e = e;
         this.x = x;
@@ -30,11 +45,23 @@ public class Enemy {
         dstRect = new Rect(x, y, x+size, y+size);
     }
 
+    /*
+     * Updates players position and animation
+     * @param dt Amount of time since last update
+     * @param player The Player object
+     * @param map The Map object
+     */
     public void update(double dt, Player player, Map map){
         move(dt, player, map);
         animate(dt);
     }
 
+    /*
+     * Updates the position of the enemy
+     * @param dt Amount of time since last update
+     * @param player The Player object
+     * @param map The Map object
+     */
     public void move(double dt, Player player, Map map){
         int dstX = player.getX();
         int dstY = player.getY();
@@ -85,6 +112,10 @@ public class Enemy {
         }
     }
 
+    /*
+     * Change position of srcRect depending on value of aniT
+     * @param dt Amount of time since last update
+     */
     private void animate(double dt){
         aniT += dt;
 
@@ -97,11 +128,12 @@ public class Enemy {
         }
     }
 
+    /*
+     * Draws the enemy to the screen
+     * @param canvas The Canvas that everything is drawn to
+     */
     public void draw(Canvas canvas){
         Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10);
 
         canvas.drawBitmap(e, srcRect, dstRect, null);
     }

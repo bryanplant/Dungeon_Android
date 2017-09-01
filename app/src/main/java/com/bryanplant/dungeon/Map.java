@@ -10,15 +10,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-public class Map {
-    private Tile tile[][];
-    private Random rand;
-    private int mapWidth, mapHeight;
-    private int tileSize;
-    private Paint paint;
+/**
+ * Reads text file to create an environment of tiles
+ * Contains information about tiles and renders them to the screen
+ * @author bryanplant
+ */
 
-    public Map(InputStream is, int screenWidth, int screenHeight) throws IOException{
-        rand = new Random();
+public class Map {
+    private Tile tile[][];              //Two-dimensional array of Tile objects
+    private int mapWidth, mapHeight;    //Dimensions of map in tiles
+    private int tileSize;               //Pixel dimensions of each tile
+
+    /*
+     * Initializes map by reading from a text file
+     * @param is InputStream to read text file from
+     * @param screenWidth width of device screen in pixels
+     */
+    public Map(InputStream is, int screenWidth) throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -53,8 +61,12 @@ public class Map {
         br.close();
     }
 
+    /*
+     * Draw each tile to the map
+     * @param canvas The canvas to be drawn to
+     */
     public void draw(Canvas canvas){
-        paint = new Paint();
+        Paint paint = new Paint();
         paint.setColor(Color.GREEN);
         paint.setStrokeWidth(10);
         for(int i = 0; i < mapWidth; i++){
@@ -96,28 +108,28 @@ public class Map {
                 }
             }
         }
-
-        //draw lines around outside of map
-        /*paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(10);
-        canvas.drawLine(0, 0, 0, mapHeight*tileSize, paint);
-        canvas.drawLine(0, 0, mapWidth*tileSize, 0, paint);
-        canvas.drawLine(0, mapHeight*tileSize, mapWidth*tileSize, mapHeight*tileSize, paint);
-        canvas.drawLine(mapWidth*tileSize, 0, mapWidth*tileSize, mapHeight*tileSize, paint);*/
     }
 
+    //Return map width in tiles
     public int getMapWidth(){
         return mapWidth;
     }
 
+    //return map height in tiles
     public int getMapHeight(){
         return mapHeight;
     }
 
+    //return size of tile in pixels
     public int getTileSize(){
         return tileSize;
     }
 
+    /*
+     * Return Tile object of specific tile
+     * @param x X location of tile
+     * @param y Y location of tile
+     */
     public Tile getTile(int x, int y){
         return tile[x][y];
     }

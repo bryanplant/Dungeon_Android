@@ -1,15 +1,17 @@
-package com.bryanplant.dungeon;
+package com.bryanplant.characters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-/*
+import com.bryanplant.dungeon.Map;
+
+/**
  * The Enemy class stores information about an enemy character
- * and handles everything required animate the character and update
+ * and handles everything required to animate the character and update
  * the character's position and actions
+ * @author bryanplant
  */
 
 public class Enemy {
@@ -23,7 +25,7 @@ public class Enemy {
     private double aniInterval = .35;   //time between animation frames
     private double speed = 300;         //speed at which the enemy moves
     private Bitmap e;                   //stores enemy sprite
-    private Rect srcRect, dstRect, moveRect;  //sprite on bitmap, sprite on screen, next position of sprite
+    private Rect srcRect, dstRect, moveRect;  //sprite on bitmap, sprite on screen, where the sprite is moving to
 
     /*
      * Initializes Enemy

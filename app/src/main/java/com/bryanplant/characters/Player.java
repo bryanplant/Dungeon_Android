@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package com.bryanplant.characters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -6,19 +6,35 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.bryanplant.dungeon.Map;
+
+/**
+ * The Player class stores information about an player character
+ * and handles everything required to animate the character and update
+ * the character's position and actions according to user input
+ * @author bryanplant
+ */
+
 public class Player{
-    private static final String TAG = GameView.class.getSimpleName();
 
-    private Rect srcRect, dstRect;
-    private Bitmap p;
-    private int x, y;
-    private int dir, srcWidth, srcHeight, size;
-    private double aniT = 0;
-    private double aniInterval = .35;
-    private double speed = 500;
-    private Rect moveRect;
-    private boolean moving = false;
+    private Bitmap p;                               //contains player sprite
+    private int x, y;                               //player x and y coordinates
+    private int dir;                                //direction player is facing
+    private int srcWidth, srcHeight;                //dimensions of player sprite on bitmap
+    private int size;                               //dimensions of player sprite to be drawn to the screen
+    private double aniT = 0;                        //animation timer
+    private double aniInterval = .35;               //time between animation frames
+    private double speed = 500;                     //speed at which player moves
+    private Rect srcRect, dstRect, moveRect;        //sprite on bitmap, sprite on screen, where the sprite is moving to
+    private boolean moving = false;                 //whether or not player is moving
 
+    /*
+     * Initializes Player
+     * @param p Bitmap containing player sprite
+     * @param x Starting x coordinate of Player
+     * @param y Starting y coordinate of Player
+     * @param size Width and height of sprite drawn to screen
+     */
     public Player(Bitmap p, int x, int y, int size){
         this.p = p;
         this.x = x;
@@ -32,21 +48,37 @@ public class Player{
         dstRect = new Rect(x, y, x+size, y+size);
     }
 
-    public void handleInput(int targetX, int targetY, Map map){
+    /*
+     * Receives input and controls character accordingly
+     * @param targetX X location where character is to move to
+     * @param targetY Y location where character is to move to
+     */
+    public void handleInput(int targetX, int targetY){
             moveRect.offsetTo(targetX-size/2, targetY-size/2);
             moving = true;
     }
 
+    /*
+     * Calls functions to update the player's location, actions, and animation
+     * @param dt Amount of time since last update
+     * @param map The Map object
+     */
     public void update(double dt, Map map){
         move(dt, map);
         animate(dt);
     }
 
+    /*
+     * Moves player towards and target location while checking to ensure that
+     * the player is not colliding with the environment
+     * @param dt Amount of time since last update
+     * @param Map The Map object
+     */
     private void move(double dt, Map map){
         int dstX = moveRect.left;
         int dstY = moveRect.top;
         int nextX = x, nextY = y;
-        Rect nextRect;
+        Rect nextRect;  //next location of player sprite
         moving = true;
 
         if(x != dstX || y != dstY) {
@@ -94,6 +126,10 @@ public class Player{
             moving = false;
     }
 
+    /*
+     * Change position of srcRect depending on value of aniT
+     * @param dt Amount of time since last update
+     */
     private void animate(double dt){
         if(moving) {
             aniT += dt;
@@ -112,6 +148,10 @@ public class Player{
         }
     }
 
+    /*
+     * Draw player character and movement indicator to screen
+     * @param canvas The Canvas that everything is drawn to
+     */
     public void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -125,14 +165,17 @@ public class Player{
         canvas.drawBitmap(p, srcRect, dstRect, null);
     }
 
+    //return x position of player
     public int getX(){
         return x;
     }
 
+    //return y position of player
     public int getY(){
         return y;
     }
 
+    //return size of player
     public int getSize(){
         return size;
     }

@@ -1,29 +1,26 @@
 package com.bryanplant.dungeon;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.RelativeLayout;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.bryanplant.characters.Enemy;
+import com.bryanplant.characters.Player;
 
-public class GameView extends SurfaceView implements
-        SurfaceHolder.Callback {
+/**
+ * Contains objects to run game
+ * Updates and renders these objects
+ * @author bryanplant
+ */
+
+public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = GameView.class.getSimpleName();
-    private String avgFps;
 
     private MainThread thread;
     private Player player;
@@ -43,7 +40,7 @@ public class GameView extends SurfaceView implements
         enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
         try {
-            map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
+            map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels);
         }
         catch(Exception e){
             Log.d(TAG, "Unable to load map!");
@@ -74,7 +71,7 @@ public class GameView extends SurfaceView implements
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            player.handleInput((int)event.getX() + camera.getX(), (int)event.getY() + camera.getY(), map);
+            player.handleInput((int)event.getX() + camera.getX(), (int)event.getY() + camera.getY());
         }
         return super.onTouchEvent(event);
     }
@@ -90,8 +87,6 @@ public class GameView extends SurfaceView implements
         player.draw(canvas);
         enemy.draw(canvas);
         hud.draw(canvas, camera);
-        // display fps
-        //displayFps(canvas, avgFps);
     }
 
     public void update(double dt){
@@ -106,18 +101,5 @@ public class GameView extends SurfaceView implements
 
     public void resume(){
         thread.setRunning(true);
-    }
-
-    private void displayFps(Canvas canvas, String fps) {
-        if (canvas != null && fps != null) {
-            Paint paint = new Paint();
-            paint.setARGB(255, 255, 255, 255);
-            paint.setTextSize(20);
-            canvas.drawText(fps, this.getWidth() - 100, 50, paint);
-        }
-    }
-
-    public void setAvgFps(String avgFps) {
-        this.avgFps = avgFps;
     }
 }

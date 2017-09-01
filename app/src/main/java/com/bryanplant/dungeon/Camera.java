@@ -1,11 +1,13 @@
 package com.bryanplant.dungeon;
 
-/*
+/**
  * The Camera class receives information about the player and the map and
  * determines the x and y location of what part of the map should be drawn
  * to the screen.
  * @author Bryan Plant
  */
+
+import com.bryanplant.characters.Player;
 
 public class Camera {
     private int x = 0, y = 0; //x and y coordinates of camera

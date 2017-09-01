@@ -1,34 +1,22 @@
 package com.bryanplant.dungeon;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
- * @author impaler
- *
- * The Main thread which contains the game loop. The thread must have access to
- * the surface view and holder to trigger events every game tick.
+ * Thread which contains the game loop
+ * @author bryanplant
  */
+
 public class MainThread extends Thread {
 
-    private static final String TAG = MainThread.class.getSimpleName();
+    private final static int 	MAX_FPS = 30;                    //max fps allowed
+    private final static int	FRAME_PERIOD = 1000 / MAX_FPS;   //number of milliseconds per frame
 
-    // desired fps
-    private final static int 	MAX_FPS = 30;
-    // maximum number of frames to be skipped
-    private final static int	MAX_FRAME_SKIPS = 0;
-    // the frame period
-    private final static int	FRAME_PERIOD = 1000 / MAX_FPS;
+    private SurfaceHolder surfaceHolder;    //surface holder to access physical surface
+    private GameView gameView;              //handles input and draws game to screen
 
-    // Surface holder that can access the physical surface
-    private SurfaceHolder surfaceHolder;
-    // The actual view that handles inputs
-    // and draws to the surface
-    private GameView gameView;
-
-    // flag to hold game state
-    private boolean running;
+    private boolean running;                //if the game is running
 
     public MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
         super();
@@ -38,77 +26,41 @@ public class MainThread extends Thread {
 
     @Override
     public void run() {
-        Canvas canvas;
-        Log.d(TAG, "Starting game loop");
+        Canvas canvas;  //canvas to be drawn to
 
-        long beginTime; // the time when the cycle begun
-        long timeDiff;		// the time it took for the cycle to execute
-        int sleepTime;		// ms to sleep (<0 if we're behind)
-        int framesSkipped;	// number of frames being skipped
-        double dt = 0;
-        int frames = 0;
-        long fpsTime = 0;
+        long beginTime = System.currentTimeMillis(); //starting time of loop
+        long timeDiff;		//how long it took the loop to execute
+        int sleepTime;		//how long to wait at end of loop
+        double dt;          //how long since last update
 
         while (!this.isInterrupted()) {
             if(running) {
-                beginTime = System.currentTimeMillis();
                 canvas = null;
-                // try locking the canvas for exclusive pixel editing
-                // in the surface
+
                 try {
-                    canvas = this.surfaceHolder.lockCanvas();
+                    canvas = this.surfaceHolder.lockCanvas(); //lock canvas to edit pixels
                     synchronized (surfaceHolder) {
-                        framesSkipped = 0;    // resetting the frames skipped
-                        // update game state
-                        this.gameView.update(dt);
-                        // render state to the screen
-                        // draws the canvas on the panel
-                        this.gameView.render(canvas);
-                        frames++;
-                        // calculate how long did the cycle take
-                        timeDiff = System.currentTimeMillis() - beginTime;
-                        //Log.d(TAG, "deltaT:" + timeDiff);
-                        // calculate sleep time
-                        sleepTime = (int) (FRAME_PERIOD - timeDiff);
-                        //Log.d(TAG, "Sleep time: " + sleepTime);
+                        dt = (double)(System.currentTimeMillis() - beginTime)/1000; //calculate time since last update
+                        beginTime = System.currentTimeMillis(); //reset loop begin time
+
+                        this.gameView.update(dt);       //update state of game
+                        this.gameView.render(canvas);   //render to screen
+
+                        timeDiff = System.currentTimeMillis() - beginTime;  //calculate how long loop took
+                        sleepTime = (int) (FRAME_PERIOD - timeDiff);        //calculate how long to sleep
 
                         if (sleepTime > 0) {
-                            // if sleepTime > 0 we're OK
                             try {
-                                // send the thread to sleep for a short period
-                                // very useful for battery saving
-                                Thread.sleep(sleepTime);
+                                Thread.sleep(sleepTime);     //thread sleep
                             } catch (InterruptedException e) {
                             }
                         }
-
-                        while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                            // we need to catch up
-                            this.gameView.update(dt); // update without rendering
-                            sleepTime += FRAME_PERIOD;    // add frame period to check if in next frame
-                            framesSkipped++;
-                        }
-
-                        if (framesSkipped > 0) {
-                            Log.d(TAG, "Skipped:" + framesSkipped);
-                        }
-
-                        fpsTime += System.currentTimeMillis() - beginTime;
-                        dt = (double)(System.currentTimeMillis() - beginTime)/1000;
-
-                        if (fpsTime >= 1000) {
-                            gameView.setAvgFps(Double.toString(frames / ((double) 1000 / fpsTime)));
-                            frames = 0;
-                            fpsTime = 0;
-                        }
                     }
                 } finally {
-                    // in case of an exception the surface is not left in
-                    // an inconsistent state
                     if (canvas != null) {
                         surfaceHolder.unlockCanvasAndPost(canvas);
                     }
-                }    // end finally
+                }
             }
             else{
                 try {

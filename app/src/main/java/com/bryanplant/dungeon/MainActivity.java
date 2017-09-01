@@ -7,25 +7,27 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-//https://www.javacodegeeks.com/2011/07/android-game-development-moving-images.html
+/**
+ * Activity to display the GameView
+ * Accessed by clickiing "Play" button on TitleActivity
+ * @author bryanplant
+ */
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private GameView gameView;
+    private GameView gameView;  //handles input and draws to screen
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // requesting to turn the title OFF
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // set our MainGamePanel as the View
         gameView = new GameView(this);
 
         setContentView(gameView);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE); //set orientation to landscape, can be rotated
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);      //keep the screen on
         Log.d(TAG, "View added");
     }
 

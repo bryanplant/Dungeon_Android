@@ -1,4 +1,4 @@
-package dungeon;
+package com.bryanplant.dungeon;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.bryanplant.dungeon.R;
 
 /**
  * Title Screen activity

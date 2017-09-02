@@ -1,4 +1,4 @@
-package dungeon;
+package com.bryanplant.dungeon;
 
 /**
  * The Camera class receives information about the player and the map and

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#120675"
-    tools:context="dungeon.TitleActivity">
+    tools:context="dungeon.com.bryanplant.dungeon.TitleActivity">
 
     <ImageView
         android:id="@+id/imageView"

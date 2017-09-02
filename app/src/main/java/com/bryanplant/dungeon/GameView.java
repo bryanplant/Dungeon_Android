@@ -1,4 +1,4 @@
-package dungeon;
+package com.bryanplant.dungeon;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.bryanplant.dungeon.R;
 
 /**
  * Contains objects to run game

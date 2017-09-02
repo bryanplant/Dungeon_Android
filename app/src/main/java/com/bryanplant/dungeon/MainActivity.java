@@ -1,4 +1,4 @@
-package dungeon;
+package com.bryanplant.dungeon;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;

@@ -4,20 +4,18 @@
     package="com.bryanplant.dungeon">
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:fullBackupContent=""
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="dungeon.MainActivity"
+            android:name=".MainActivity"
             android:noHistory="true">
 
         </activity>
         <activity
-            android:name="dungeon.TitleActivity"
+            android:name=".TitleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Dungeon"
             android:theme="@style/FullscreenTheme">

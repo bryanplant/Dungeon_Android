@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 /**
  * The Camera class receives information about the player and the map and
@@ -6,9 +6,6 @@ package com.bryanplant.dungeon;
  * to the screen.
  * @author Bryan Plant
  */
-
-import com.bryanplant.characters.Player;
-
 public class Camera {
     private int x = 0, y = 0; //x and y coordinates of camera
 

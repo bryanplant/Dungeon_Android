@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.view.WindowManager;
 
 /**
  * Activity to display the GameView
- * Accessed by clickiing "Play" button on TitleActivity
+ * Accessed by clicking "Play" button on TitleActivity
  * @author bryanplant
  */
 

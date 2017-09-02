@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,14 +8,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Random;
 
 /**
  * Reads text file to create an environment of tiles
  * Contains information about tiles and renders them to the screen
  * @author bryanplant
  */
-
 public class Map {
     private Tile tile[][];              //Two-dimensional array of Tile objects
     private int mapWidth, mapHeight;    //Dimensions of map in tiles

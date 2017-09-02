@@ -1,11 +1,8 @@
-package com.bryanplant.characters;
+package dungeon;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
-
-import com.bryanplant.dungeon.Map;
 
 /**
  * The Enemy class stores information about an enemy character
@@ -13,7 +10,6 @@ import com.bryanplant.dungeon.Map;
  * the character's position and actions
  * @author bryanplant
  */
-
 public class Enemy {
 
     private int x, y;                   //x and y location of enemy
@@ -21,11 +17,9 @@ public class Enemy {
     private int srcWidth, srcHeight;    //dimensions of enemy sprite on source png
     private int size;                   //width and height of sprite to be drawn to the screen
     private boolean moving;             //if the enemy is moving or not
-    private double aniT = 0;            //animation timer
-    private double aniInterval = .35;   //time between animation frames
-    private double speed = 300;         //speed at which the enemy moves
     private Bitmap e;                   //stores enemy sprite
     private Rect srcRect, dstRect, moveRect;  //sprite on bitmap, sprite on screen, where the sprite is moving to
+    private double aniT = 0;            //animation timer
 
     /*
      * Initializes Enemy
@@ -64,11 +58,12 @@ public class Enemy {
      * @param player The Player object
      * @param map The Map object
      */
-    public void move(double dt, Player player, Map map){
+    private void move(double dt, Player player, Map map){
         int dstX = player.getX();
         int dstY = player.getY();
         int nextX = x, nextY = y;
         Rect nextRect;
+        double speed = 300;         //speed at which the enemy moves
 
         moving = true;
 
@@ -119,14 +114,22 @@ public class Enemy {
      * @param dt Amount of time since last update
      */
     private void animate(double dt){
-        aniT += dt;
+        double aniInterval = .35;   //time between animation frames
 
-        if (aniT < aniInterval) {
-            srcRect.offsetTo(srcWidth, srcHeight * dir);
-        } else if (aniT >= aniInterval && aniT < aniInterval * 2) {
-            srcRect.offsetTo(srcWidth * 2, srcHeight * dir);
-        } else if (aniT >= aniInterval * 2 && aniT < aniInterval * 3) {
+        if(moving) {
+            aniT += dt;
+
+            if (aniT < aniInterval) {
+                srcRect.offsetTo(srcWidth, srcHeight * dir);
+            } else if (aniT >= aniInterval && aniT < aniInterval * 2) {
+                srcRect.offsetTo(srcWidth * 2, srcHeight * dir);
+            } else if (aniT >= aniInterval * 2 && aniT < aniInterval * 3) {
+                aniT = 0;
+            }
+        }
+        else{
             aniT = 0;
+            srcRect.offsetTo(0, srcHeight * dir);
         }
     }
 
@@ -135,8 +138,6 @@ public class Enemy {
      * @param canvas The Canvas that everything is drawn to
      */
     public void draw(Canvas canvas){
-        Paint paint = new Paint();
-
         canvas.drawBitmap(e, srcRect, dstRect, null);
     }
 }

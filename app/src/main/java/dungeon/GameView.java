@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -9,15 +9,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.bryanplant.characters.Enemy;
-import com.bryanplant.characters.Player;
+import com.bryanplant.dungeon.R;
 
 /**
  * Contains objects to run game
  * Updates and renders these objects
  * @author bryanplant
  */
-
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = GameView.class.getSimpleName();

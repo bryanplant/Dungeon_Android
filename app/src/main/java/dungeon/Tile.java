@@ -1,20 +1,27 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Tile {
-    private Rect rect;
-    private int x, y, size;
-    private int type, color;
+/**
+ * Contains information about a tile object
+ * @author bryanplant
+ */
+class Tile {
+    private Rect rect;          //Rectangle of tile
+    private int type, color;    //The type and color of the tile
 
+    /*
+     * Initializes a Tile
+     * @param x X coordinate of tile
+     * @param y Y coordinate of tile
+     * @param size The size of the tile in pixels
+     * @param type The type of the tile (wall, floor etc.)
+     */
     public Tile(int x, int y, int size, int type){
-        this.x = x;
-        this.y = y;
         this.type = type;
-        this.size = size;
         rect = new Rect(x*size, y*size, x*size+size, y*size+size);
 
         switch(type){
@@ -30,6 +37,10 @@ public class Tile {
         }
     }
 
+    /*
+     *  Draw the tile to the canvas
+     *  @param canvas The Canvas to be drawn to
+     */
     public void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setStrokeWidth(10);
@@ -37,15 +48,13 @@ public class Tile {
         canvas.drawRect(rect, paint);
     }
 
+    //Returns the tile's rectangle
     public Rect getRect(){
         return rect;
     }
 
+    //Returns the tile's type
     public int getType(){
         return type;
-    }
-
-    public int getSize(){
-        return size;
     }
 }

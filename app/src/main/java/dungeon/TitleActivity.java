@@ -1,29 +1,27 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.bryanplant.dungeon.R;
+
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Title Screen activity
+ * Displays game options and starts corresponding activities
+ * @author bryanplant
  */
 public class TitleActivity extends AppCompatActivity {
     private static final String TAG = TitleActivity.class.getSimpleName();
 
-    Button play;
-    ImageView background;
+    Button play;                //The button to start the game activity
+    ImageView background;       //Background image
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,11 +32,16 @@ public class TitleActivity extends AppCompatActivity {
 
         play = (Button)findViewById(R.id.PlayButton);
         background = (ImageView)findViewById(R.id.imageView);
-        background.setImageResource(R.mipmap.titlescreen);
-        background.setScaleType(ImageView.ScaleType.FIT_XY);
+        if (background != null) {      //make sure background image was found
+            background.setImageResource(R.mipmap.titlescreen);
+            background.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+        else{
+            Log.d(TAG, "Could not find title screen background image!");
+        }
 
         play.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View v) {   //if play button is pressed
                     Intent i = new Intent(TitleActivity.this, MainActivity.class);
                     startActivity(i);
             }

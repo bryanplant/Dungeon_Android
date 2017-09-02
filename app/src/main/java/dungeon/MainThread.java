@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
@@ -8,12 +8,12 @@ import android.view.SurfaceHolder;
  * @author bryanplant
  */
 
-public class MainThread extends Thread {
+class MainThread extends Thread {
 
     private final static int 	MAX_FPS = 30;                    //max fps allowed
     private final static int	FRAME_PERIOD = 1000 / MAX_FPS;   //number of milliseconds per frame
 
-    private SurfaceHolder surfaceHolder;    //surface holder to access physical surface
+    private final SurfaceHolder surfaceHolder;    //surface holder to access physical surface
     private GameView gameView;              //handles input and draws game to screen
 
     private boolean running;                //if the game is running
@@ -53,6 +53,7 @@ public class MainThread extends Thread {
                             try {
                                 Thread.sleep(sleepTime);     //thread sleep
                             } catch (InterruptedException e) {
+                                //thread interrupted
                             }
                         }
                     }
@@ -65,7 +66,9 @@ public class MainThread extends Thread {
             else{
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException e){}
+                } catch (InterruptedException e){
+                    //thread interrupted
+                }
             }
         }
     }

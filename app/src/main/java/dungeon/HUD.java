@@ -1,4 +1,4 @@
-package com.bryanplant.dungeon;
+package dungeon;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

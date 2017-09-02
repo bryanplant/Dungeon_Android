@@ -1,12 +1,10 @@
-package com.bryanplant.characters;
+package dungeon;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-
-import com.bryanplant.dungeon.Map;
 
 /**
  * The Player class stores information about an player character

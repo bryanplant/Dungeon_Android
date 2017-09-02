@@ -1,6 +1,7 @@
 package com.bryanplant.dungeon;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
@@ -10,8 +11,10 @@ import android.view.SurfaceHolder;
 
 class MainThread extends Thread {
 
+    private static final String TAG = MainThread.class.getSimpleName();
+
     private final static int 	MAX_FPS = 30;                    //max fps allowed
-    private final static int	FRAME_PERIOD = 1000 / MAX_FPS;   //number of milliseconds per frame
+    private final static long	FRAME_PERIOD = 1000 / MAX_FPS;   //number of milliseconds per frame
 
     private final SurfaceHolder surfaceHolder;    //surface holder to access physical surface
     private GameView gameView;              //handles input and draws game to screen
@@ -32,6 +35,8 @@ class MainThread extends Thread {
         long timeDiff;		//how long it took the loop to execute
         int sleepTime;		//how long to wait at end of loop
         double dt;          //how long since last update
+        int frames = 0;
+        double fpsStart = System.currentTimeMillis();
 
         while (!this.isInterrupted()) {
             if(running) {
@@ -45,16 +50,23 @@ class MainThread extends Thread {
 
                         this.gameView.update(dt);       //update state of game
                         this.gameView.render(canvas);   //render to screen
+                        frames++;
 
                         timeDiff = System.currentTimeMillis() - beginTime;  //calculate how long loop took
-                        sleepTime = (int) (FRAME_PERIOD - timeDiff);        //calculate how long to sleep
+                        sleepTime = (int)(FRAME_PERIOD - timeDiff);      //calculate when to sleep till
 
                         if (sleepTime > 0) {
                             try {
-                                Thread.sleep(sleepTime);     //thread sleep
+                                this.sleep(sleepTime);     //thread sleep
                             } catch (InterruptedException e) {
                                 //thread interrupted
                             }
+                        }
+
+                        if(System.currentTimeMillis() - fpsStart >= 1000){
+                            gameView.setFpsAverage(frames/((System.currentTimeMillis() - fpsStart)/1000));
+                            frames = 0;
+                            fpsStart = System.currentTimeMillis();
                         }
                     }
                 } finally {
@@ -65,7 +77,7 @@ class MainThread extends Thread {
             }
             else{
                 try {
-                    Thread.sleep(100);
+                    this.sleep(100);
                 } catch (InterruptedException e){
                     //thread interrupted
                 }

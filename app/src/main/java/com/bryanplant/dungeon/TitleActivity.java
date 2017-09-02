@@ -19,7 +19,6 @@ public class TitleActivity extends AppCompatActivity {
     private static final String TAG = TitleActivity.class.getSimpleName();
 
     Button play;                //The button to start the game activity
-    ImageView background;       //Background image
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,14 +28,6 @@ public class TitleActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         play = (Button)findViewById(R.id.PlayButton);
-        background = (ImageView)findViewById(R.id.imageView);
-        if (background != null) {      //make sure background image was found
-            background.setImageResource(R.mipmap.titlescreen);
-            background.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
-        else{
-            Log.d(TAG, "Could not find title screen background image!");
-        }
 
         play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {   //if play button is pressed

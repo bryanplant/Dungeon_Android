@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#120675"
-    tools:context="dungeon.com.bryanplant.dungeon.TitleActivity">
+    tools:context="com.bryanplant.dungeon.TitleActivity">
 
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/titlescreen"
+        android:scaleType="fitXY"
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/titlescreen"
         android:contentDescription="Background Image" />
 
     <TextView

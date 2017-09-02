@@ -25,6 +25,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Camera camera;
     private HUD hud;
 
+    private double fpsAverage;
+
     public GameView(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
@@ -32,8 +34,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         camera = new Camera();
         hud = new HUD();
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
-        enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
+
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inScaled = true;
+
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
+        enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
         try {
             map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels);
@@ -82,7 +88,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         map.draw(canvas);
         player.draw(canvas);
         enemy.draw(canvas);
-        hud.draw(canvas, camera);
+        hud.draw(canvas, camera, fpsAverage, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 
     public void update(double dt){
@@ -97,5 +103,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void resume(){
         thread.setRunning(true);
+    }
+
+    public void setFpsAverage(double fps){
+        fpsAverage = fps;
     }
 }

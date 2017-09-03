@@ -63,7 +63,7 @@ public class Enemy {
         int dstY = player.getY();
         int nextX = x, nextY = y;
         Rect nextRect;
-        double speed = 300;         //speed at which the enemy moves
+        double speed = 300/(size/100);         //speed at which the enemy moves
 
         moving = true;
 

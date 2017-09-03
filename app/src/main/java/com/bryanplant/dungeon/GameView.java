@@ -36,7 +36,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         hud = new HUD();
 
         BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inScaled = true;
+        o.inScaled = false;
 
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
         enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);

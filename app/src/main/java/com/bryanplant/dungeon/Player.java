@@ -23,7 +23,6 @@ public class Player{
     private double aniT = 0;                        //animation timer
     private double aniInterval = .35;               //time between animation frames
     private double speed;                           //speed at which player moves
-    private double speedFactor;
     private Rect srcRect, dstRect, moveRect;        //sprite on bitmap, sprite on screen, where the sprite is moving to
     private boolean moving = false;                 //whether or not player is moving
 
@@ -39,8 +38,7 @@ public class Player{
         this.x = x;
         this.y = y;
         this.size = size;
-        speedFactor = size/100;
-        speed = 500/speedFactor;
+        speed = 4*size;
         moveRect = new Rect(x, y, x+size, y+size);
         dir = 0;
         srcWidth = p.getWidth()/3;

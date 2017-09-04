@@ -18,6 +18,7 @@ public class Map {
     private Tile tile[][];              //Two-dimensional array of Tile objects
     private int mapWidth, mapHeight;    //Dimensions of map in tiles
     private int tileSize;               //Pixel dimensions of each tile
+    private int playerStartX=0, playerStartY=0;
 
     /*
      * Initializes map by reading from a text file
@@ -34,24 +35,19 @@ public class Map {
         tileSize = screenWidth/16;
 
         tile = new Tile[mapWidth][mapHeight];
-        int type = 0;
+        int type;
 
         for(int j = 0; j < mapHeight; j++){
             String line = br.readLine();
 
             line = line.replaceAll("\\s", "");
             for(int i = 0; i < mapWidth; i++){
-                switch(line.charAt(i)){
-                    case '0':
-                        type = 0;
-                        break;
-                    case '1':
-                        type = 1;
-                        break;
-                    case '2':
-                        type = 2;
-                        break;
+                type = Character.getNumericValue(line.charAt(i));
+                if(type == 2){
+                    playerStartX = i*tileSize;
+                    playerStartY = j*tileSize;
                 }
+
                 tile[i][j] = new Tile(i, j, tileSize, type);
             }
         }
@@ -78,28 +74,28 @@ public class Map {
                 if(tile[i][j].getType() == 1) { //check if the tile is a wall
                     //draw line to left of wall
                     if(i != 0) {
-                        if(tile[i - 1][j].getType() == 0) {
+                        if(tile[i - 1][j].getType() != 1) {
                             canvas.drawLine(i*tileSize, j*tileSize, i*tileSize, (j+1)*tileSize, paint);
                         }
                     }
 
                     //draw line above wall
                     if(j != 0) {
-                        if(tile[i][j-1].getType() == 0){
+                        if(tile[i][j-1].getType() != 1){
                             canvas.drawLine(i*tileSize-5, j*tileSize, (i+1)*tileSize, j*tileSize, paint);
                         }
                     }
 
                     //draw line to right of wall
                     if(i != mapWidth-1){
-                        if(tile[i+1][j].getType() == 0){
+                        if(tile[i+1][j].getType() != 1){
                             canvas.drawLine((i+1)*tileSize, j*tileSize-5, (i+1)*tileSize, (j+1)*tileSize, paint);
                         }
                     }
 
                     //draw line below wall
                     if(j != mapHeight-1){
-                        if(tile[i][j+1].getType() == 0){
+                        if(tile[i][j+1].getType() != 1){
                             canvas.drawLine(i*tileSize-5, (j+1)*tileSize, (i+1)*tileSize+5, (j+1)*tileSize, paint);
                         }
                     }
@@ -130,5 +126,17 @@ public class Map {
      */
     public Tile getTile(int x, int y){
         return tile[x][y];
+    }
+
+    public int getPlayerStartX(){
+        return playerStartX;
+    }
+
+    public int getPlayerStartY(){
+        return playerStartY;
+    }
+
+    public void setTileType(int x, int y, int type){
+        tile[x][y].setType(type);
     }
 }

@@ -35,18 +35,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         camera = new Camera();
         hud = new HUD();
 
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inScaled = false;
-
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
-        enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
-
         try {
             map = new Map(getResources().getAssets().open("map1.txt"), getResources().getDisplayMetrics().widthPixels);
         }
         catch(Exception e){
             Log.d(TAG, "Unable to load map!");
         }
+
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inScaled = false;
+
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player, o), map.getPlayerStartX(), map.getPlayerStartY(), getResources().getDisplayMetrics().widthPixels/16);
+        enemy = new Enemy(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
 
 
         thread = new MainThread(getHolder(), this);
@@ -88,7 +88,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         map.draw(canvas);
         player.draw(canvas);
         enemy.draw(canvas);
-        hud.draw(canvas, camera, fpsAverage, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
+        hud.draw(canvas, camera, player, fpsAverage, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 
     public void update(double dt){

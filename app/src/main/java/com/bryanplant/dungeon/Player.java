@@ -25,6 +25,7 @@ public class Player{
     private double speed;                           //speed at which player moves
     private Rect srcRect, dstRect, moveRect;        //sprite on bitmap, sprite on screen, where the sprite is moving to
     private boolean moving = false;                 //whether or not player is moving
+    private int score;
 
     /*
      * Initializes Player
@@ -38,13 +39,14 @@ public class Player{
         this.x = x;
         this.y = y;
         this.size = size;
-        speed = 4*size;
+        speed = 3.25*size;
         moveRect = new Rect(x, y, x+size, y+size);
         dir = 0;
         srcWidth = p.getWidth()/3;
         srcHeight = p.getHeight()/4;
         srcRect = new Rect(0, 0, srcWidth, srcHeight);
         dstRect = new Rect(x, y, x+size, y+size);
+        score = 0;
     }
 
     /*
@@ -64,6 +66,7 @@ public class Player{
      */
     public void update(double dt, Map map){
         move(dt, map);
+        checkCollision(map);
         animate(dt);
     }
 
@@ -125,6 +128,18 @@ public class Player{
             moving = false;
     }
 
+    private void checkCollision(Map map){
+        for(int i = 0; i < map.getMapWidth(); i++){
+            for(int j = 0; j < map.getMapHeight(); j++){
+                Tile tile = map.getTile(i, j);
+                if(dstRect.contains(tile.getRect().centerX(), tile.getRect().centerY()) && tile.getType() == 3){
+                    map.setTileType(i, j, 0);
+                    score+=10;
+                }
+            }
+        }
+    }
+
     /*
      * Change position of srcRect depending on value of aniT
      * @param dt Amount of time since last update
@@ -177,5 +192,9 @@ public class Player{
     //return size of player
     public int getSize(){
         return size;
+    }
+
+    public int getScore(){
+        return score;
     }
 }

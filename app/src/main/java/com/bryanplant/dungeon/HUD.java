@@ -24,15 +24,15 @@ public class HUD {
      * @param screenWidth Width of device screen in pixels
      * @param screenHeight Height of device in pixels
      */
-    public void draw(Canvas canvas, Camera camera, double fps, int screenWidth, int screenHeight){
+    public void draw(Canvas canvas, Camera camera, Player player, double fps, int screenWidth, int screenHeight){
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-        canvas.drawRect(camera.getX(), camera.getY(), 300+camera.getX(), 100+camera.getY(), paint);
-        canvas.drawRect(camera.getX() + screenWidth - 300, camera.getY(), camera.getX() + screenWidth, camera.getY()+100, paint);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(camera.getX(), camera.getY(), 400+camera.getX(), 100+camera.getY(), paint);
+        canvas.drawRect(camera.getX() + screenWidth - 325, camera.getY(), camera.getX() + screenWidth, camera.getY()+100, paint);
         paint.setColor(Color.BLACK);
         paint.setTextSize(64);
-        canvas.drawText("Score: 0", camera.getX()+20, camera.getY() + 70, paint);
+        canvas.drawText("Score: " + player.getScore(), camera.getX()+20, camera.getY() + 70, paint);
         DecimalFormat df = new DecimalFormat(".#");
-        canvas.drawText("FPS: " + df.format(fps), camera.getX() + screenWidth-275, camera.getY() + 70, paint);
+        canvas.drawText("FPS: " + df.format(fps), camera.getX() + screenWidth-300, camera.getY() + 70, paint);
     }
 }

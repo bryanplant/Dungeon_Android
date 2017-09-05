@@ -2,7 +2,10 @@ package com.bryanplant.dungeon;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * The Enemy class stores information about an enemy character
@@ -11,15 +14,21 @@ import android.graphics.Rect;
  * @author bryanplant
  */
 public class Enemy {
+    private static final String TAG = Enemy.class.getSimpleName();
 
     private int x, y;                   //x and y location of enemy
+    int tileX, tileY;
+    int targetTileX, targetTileY;
+    int nextTileX, nextTileY;
+    boolean newNextTile = true;
     private int dir;                    //direction the enemy is facing
     private int srcWidth, srcHeight;    //dimensions of enemy sprite on source png
     private int size;                   //width and height of sprite to be drawn to the screen
     private boolean moving;             //if the enemy is moving or not
     private Bitmap e;                   //stores enemy sprite
-    private Rect srcRect, dstRect, moveRect;  //sprite on bitmap, sprite on screen, where the sprite is moving to
+    private Rect srcRect, dstRect;  //sprite on bitmap, sprite on screen
     private double aniT = 0;            //animation timer
+    int color;
 
     /*
      * Initializes Enemy
@@ -33,12 +42,12 @@ public class Enemy {
         this.x = x;
         this.y = y;
         this.size = size;
-        moveRect = new Rect(x, y, x+size, y+size);
         dir = 0;
         srcWidth = e.getWidth()/3;
         srcHeight = e.getHeight()/4;
         srcRect = new Rect(0, 0, srcWidth, srcHeight);
         dstRect = new Rect(x, y, x+size, y+size);
+        color = Color.RED;
     }
 
     /*
@@ -59,54 +68,77 @@ public class Enemy {
      * @param map The Map object
      */
     private void move(double dt, Player player, Map map){
-        int dstX = player.getX();
-        int dstY = player.getY();
-        int nextX = x, nextY = y;
-        Rect nextRect;
-        double speed = 2*size;         //speed at which the enemy moves
-
+        double speed = 2.5*size;         //speed at which the enemy moves
         moving = true;
 
-        if(x != dstX || y != dstY) {
-            double length = Math.sqrt(Math.pow(dstX - x, 2) + Math.pow(dstY - y, 2));
-            double vectorX = (dstX - x) / length;
-            double vectorY = (dstY - y) / length;
-            if (Math.abs(dstX - x) <= Math.abs(speed * vectorX * dt))
-                nextX = dstX;
-            else
-                nextX += speed * vectorX * dt;
-            if (Math.abs(dstY - y) <= Math.abs(speed * vectorY * dt))
-                nextY = dstY;
-            else
-                nextY += speed * vectorY * dt;
+        tileX = dstRect.centerX()/map.getTileSize();
+        tileY = dstRect.centerY()/map.getTileSize();
 
-            nextRect = new Rect(nextX, nextY, nextX+size, nextY+size);
-            for (int i = 0; i < map.getMapWidth(); i++) {
-                for (int j = 0; j < map.getMapHeight(); j++) {
-                    if (map.getTile(i, j).getRect().intersects(nextRect.left, nextRect.top, nextRect.right, nextRect.bottom)) {
-                        if (map.getTile(i, j).getType() == 1) {
-                            moving = false;
-                            moveRect.offsetTo(x, y);
-                        }
-                    }
+        int lastDir = dir;
+
+        if(newNextTile){
+            double bestDistance = 999;
+            if(map.getTile(tileX, tileY-1).getType() != 1 && lastDir != 1){
+                nextTileX = tileX;
+                nextTileY = tileY-1;
+                bestDistance = Math.sqrt(Math.pow(tileX-targetTileX, 2) + Math.pow((tileY-1)-targetTileY, 2));
+                dir = 3;
+            }
+            if(map.getTile(tileX-1, tileY).getType() != 1 && lastDir != 0){
+                double distance = Math.sqrt(Math.pow((tileX-1)-targetTileX, 2) + Math.pow(tileY-targetTileY, 2));
+                if(distance < bestDistance){
+                    nextTileX = tileX-1;
+                    nextTileY = tileY;
+                    bestDistance = distance;
+                    dir = 2;
                 }
             }
-            if(moving) {
-                x = nextX;
-                y = nextY;
-                dstRect.set(x, y, x + size, y + size);
+            if(map.getTile(tileX, tileY+1).getType() != 1 && lastDir != 3){
+                double distance = Math.sqrt(Math.pow((tileX)-targetTileX, 2) + Math.pow((tileY+1)-targetTileY, 2));
+                if(distance < bestDistance){
+                    nextTileX = tileX;
+                    nextTileY = tileY+1;
+                    bestDistance = distance;
+                    dir = 1;
+                }
             }
-
-            double angle = Math.atan2(vectorY, vectorX) * 180 / Math.PI;
-            if (angle > -45 && angle <= 45)
-                dir = 0;
-            else if (angle > 45 && angle <= 135)
-                dir = 1;
-            else if (angle > 135 || angle < -135)
-                dir = 2;
-            else
-                dir = 3;
+            if(map.getTile(tileX+1, tileY).getType() != 1 && lastDir != 2){
+                double distance = Math.sqrt(Math.pow((tileX+1)-targetTileX, 2) + Math.pow(tileY-targetTileY, 2));
+                if(distance < bestDistance){
+                    nextTileX = tileX+1;
+                    nextTileY = tileY;
+                    dir = 0;
+                }
+            }
+            newNextTile = false;
         }
+
+        int nextTileCenterX = (int)((nextTileX+.5)*map.getTileSize());
+        int nextTileCenterY = (int)((nextTileY+.5)*map.getTileSize());
+
+        if(dir == 2 || dir == 0) {
+            if (Math.abs(dstRect.centerX() - nextTileCenterX) < speed * dt) {
+                x = nextTileCenterX-size/2;
+                newNextTile = true;
+            } else if (dstRect.centerX() < nextTileCenterX) {
+                x += speed * dt;
+            } else if (dstRect.centerX() > nextTileCenterX) {
+                x -= speed * dt;
+            }
+        }
+        else {
+            if (Math.abs(dstRect.centerY() - nextTileCenterY) < speed * dt) {
+                y = nextTileCenterY-size/2;
+                newNextTile = true;
+            } else if (dstRect.centerY() < nextTileCenterY) {
+                y += speed * dt;
+            } else if (dstRect.centerY() > nextTileCenterY) {
+                y -= speed * dt;
+            }
+        }
+
+
+        dstRect.offsetTo(x, y);
     }
 
     /*
@@ -137,7 +169,18 @@ public class Enemy {
      * Draws the enemy to the screen
      * @param canvas The Canvas that everything is drawn to
      */
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas, Map map){
+        Paint paint = new Paint();
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(10);
+
+        canvas.drawCircle((float)(nextTileX+.5)*map.getTileSize(), (float)(nextTileY+.5)*map.getTileSize(), size/2, paint);
+        canvas.drawLine(x + size/2, y + size/2, (float)(nextTileX+.5)*map.getTileSize(), (float)(nextTileY+.5)*map.getTileSize(), paint);
+
+        canvas.drawCircle((float)(targetTileX+.5)*map.getTileSize(), (float)(targetTileY+.5)*map.getTileSize(), size/2, paint);
+        canvas.drawLine(x + size/2, y + size/2, (float)(targetTileX+.5)*map.getTileSize(), (float)(targetTileY+.5)*map.getTileSize(), paint);
+
         canvas.drawBitmap(e, srcRect, dstRect, null);
     }
 }

@@ -17,6 +17,7 @@ public class Player{
 
     private Bitmap p;                               //contains player sprite
     private int x, y;                               //player x and y coordinates
+    private int tileX, tileY;
     private int dir;                                //direction player is facing
     private int srcWidth, srcHeight;                //dimensions of player sprite on bitmap
     private int size;                               //dimensions of player sprite to be drawn to the screen
@@ -126,6 +127,9 @@ public class Player{
 
         else
             moving = false;
+
+        tileX = dstRect.centerX()/map.getTileSize();
+        tileY = dstRect.centerY()/map.getTileSize();
     }
 
     private void checkCollision(Map map){
@@ -187,6 +191,22 @@ public class Player{
     //return y position of player
     public int getY(){
         return y;
+    }
+
+    public int getDir(){
+        return dir;
+    }
+
+    public Rect getRect(){
+        return dstRect;
+    }
+
+    public int getTileX(){
+        return tileX;
+    }
+
+    public int getTileY(){
+        return tileY;
     }
 
     //return size of player

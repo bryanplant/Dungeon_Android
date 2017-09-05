@@ -1,7 +1,6 @@
 package com.bryanplant.dungeon;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
@@ -57,7 +56,7 @@ class MainThread extends Thread {
 
                         if (sleepTime > 0) {
                             try {
-                                this.sleep(sleepTime);     //thread sleep
+                                sleep(sleepTime);     //thread sleep
                             } catch (InterruptedException e) {
                                 //thread interrupted
                             }
@@ -77,7 +76,7 @@ class MainThread extends Thread {
             }
             else{
                 try {
-                    this.sleep(100);
+                    sleep(100);
                 } catch (InterruptedException e){
                     //thread interrupted
                 }

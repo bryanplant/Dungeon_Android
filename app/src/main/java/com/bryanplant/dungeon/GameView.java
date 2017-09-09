@@ -22,6 +22,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Player player;
     private EnemyA enemyA;
     private EnemyB enemyB;
+    private EnemyC enemyC;
     private Map map;
     private Camera camera;
     private HUD hud;
@@ -47,8 +48,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         o.inScaled = false;
 
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player, o), map.getPlayerStartX(), map.getPlayerStartY(), getResources().getDisplayMetrics().widthPixels/16);
-        enemyA = new EnemyA(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
-        enemyB = new EnemyB(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16, getResources().getDisplayMetrics().widthPixels/16);
+        enemyA = new EnemyA(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/16);
+        enemyB = new EnemyB(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/16);
+        enemyC = new EnemyC(BitmapFactory.decodeResource(getResources(), R.drawable.enemy, o), getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/8, getResources().getDisplayMetrics().widthPixels/16);
 
 
         thread = new MainThread(getHolder(), this);
@@ -91,6 +93,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         player.draw(canvas);
         enemyA.draw(canvas, map);
         enemyB.draw(canvas, map);
+        enemyC.draw(canvas, map);
         hud.draw(canvas, camera, player, fpsAverage, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 
@@ -98,6 +101,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         player.update(dt, map);
         enemyA.update(dt, player, map);
         enemyB.update(dt, player, map);
+        enemyC.update(dt, player, enemyA, map);
         camera.update(player, map, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
     }
 

@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * The Enemy class stores information about an enemy character
  * and handles everything required to animate the character and update
@@ -22,6 +24,7 @@ public class Enemy {
     int nextTileX, nextTileY;
     boolean newNextTile = true;
     private int dir;                    //direction the enemy is facing
+    private ArrayList<Integer> lastDir;
     private int srcWidth, srcHeight;    //dimensions of enemy sprite on source png
     private int size;                   //width and height of sprite to be drawn to the screen
     private boolean moving;             //if the enemy is moving or not
@@ -43,6 +46,8 @@ public class Enemy {
         this.y = y;
         this.size = size;
         dir = 0;
+        lastDir = new ArrayList();
+        lastDir.add(-1);
         srcWidth = e.getWidth()/3;
         srcHeight = e.getHeight()/4;
         srcRect = new Rect(0, 0, srcWidth, srcHeight);
@@ -74,17 +79,18 @@ public class Enemy {
         tileX = dstRect.centerX()/map.getTileSize();
         tileY = dstRect.centerY()/map.getTileSize();
 
-        int lastDir = dir;
-
         if(newNextTile){
+            lastDir.add(dir);
+            if(lastDir.size() > 2)
+                lastDir.remove(0);
             double bestDistance = 999;
-            if(map.getTile(tileX, tileY-1).getType() != 1 && lastDir != 1){
+            if(map.getTile(tileX, tileY-1).getType() != 1 && lastDir.get(1)!=1 && (lastDir.contains(3) || lastDir.get(0) == lastDir.get(1))){
                 nextTileX = tileX;
                 nextTileY = tileY-1;
                 bestDistance = Math.sqrt(Math.pow(tileX-targetTileX, 2) + Math.pow((tileY-1)-targetTileY, 2));
                 dir = 3;
             }
-            if(map.getTile(tileX-1, tileY).getType() != 1 && lastDir != 0){
+            if(map.getTile(tileX-1, tileY).getType() != 1 && lastDir.get(1)!=0 && (lastDir.contains(2) || lastDir.get(0) == lastDir.get(1))){
                 double distance = Math.sqrt(Math.pow((tileX-1)-targetTileX, 2) + Math.pow(tileY-targetTileY, 2));
                 if(distance < bestDistance){
                     nextTileX = tileX-1;
@@ -93,7 +99,7 @@ public class Enemy {
                     dir = 2;
                 }
             }
-            if(map.getTile(tileX, tileY+1).getType() != 1 && lastDir != 3){
+            if(map.getTile(tileX, tileY+1).getType() != 1 && lastDir.get(1)!=3 && (lastDir.contains(1) || lastDir.get(0) == lastDir.get(1))){
                 double distance = Math.sqrt(Math.pow((tileX)-targetTileX, 2) + Math.pow((tileY+1)-targetTileY, 2));
                 if(distance < bestDistance){
                     nextTileX = tileX;
@@ -102,7 +108,7 @@ public class Enemy {
                     dir = 1;
                 }
             }
-            if(map.getTile(tileX+1, tileY).getType() != 1 && lastDir != 2){
+            if(map.getTile(tileX+1, tileY).getType() != 1 && lastDir.get(1)!=2 && (lastDir.contains(0) || lastDir.get(0) == lastDir.get(1))){
                 double distance = Math.sqrt(Math.pow((tileX+1)-targetTileX, 2) + Math.pow(tileY-targetTileY, 2));
                 if(distance < bestDistance){
                     nextTileX = tileX+1;
@@ -111,6 +117,7 @@ public class Enemy {
                 }
             }
             newNextTile = false;
+            Log.d(TAG, "Dir" + lastDir);
         }
 
         int nextTileCenterX = (int)((nextTileX+.5)*map.getTileSize());
@@ -182,5 +189,13 @@ public class Enemy {
         canvas.drawLine(x + size/2, y + size/2, (float)(targetTileX+.5)*map.getTileSize(), (float)(targetTileY+.5)*map.getTileSize(), paint);
 
         canvas.drawBitmap(e, srcRect, dstRect, null);
+    }
+
+    public int getTileX(){
+        return tileX;
+    }
+
+    public int getTileY(){
+        return tileY;
     }
 }
